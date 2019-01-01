@@ -21,7 +21,7 @@ public class TrainTestSplit {
         int size = paths.size();
         Random random = new Random();
         int testSize = (int) (testRatio * size);
-        // 测试集
+        // 测试集划分
         for (int i = 0; i < testSize; i++) {
             int index = random.nextInt(size--);
             Path targetPath = paths.get(index);
@@ -29,7 +29,7 @@ public class TrainTestSplit {
             fsUtils.copy(path + "/" + targetFileName, testPath + "/" + targetFileName);
             paths.remove(index);
         }
-        // 训练集
+        // 剩余的作为训练集
         for (Path targetPath : paths) {
             String targetFileName = targetPath.toString().substring(targetPath.toString().lastIndexOf('/'));
             fsUtils.copy(path + "/" + targetFileName, trainPath + "/" + targetFileName);

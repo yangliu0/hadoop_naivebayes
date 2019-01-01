@@ -54,16 +54,17 @@ public class CalcEachWordNumInClass extends Configured implements Tool {
 
         public void map(Text key, BytesWritable value, Context context)
                 throws IOException, InterruptedException {
-            //因为sequenceFile中的value是以二进制形式存储的，所以使用getBayes()方法将
-            //二进制的值转换为字符串
+            // 因为sequenceFile中的value是以二进制形式存储的，所以使用getBayes()方法将
+            // 二进制的值转换为字符串
             String content = new String(value.getBytes(), 0, value.getLength());
             Matcher m = PATTERN.matcher(content);
             String[] classAndFile = key.toString().split("@");
             String className = classAndFile[0];
 
             while (m.find()) {
-                String tempkey = m.group();//使用正则表达式，如果是英文单词则有效
-                if (!stopWords.contains(tempkey)) { //如果不是停用词表中的词则有效
+                String tempkey = m.group(); // 使用正则表达式，如果是英文单词则有效
+                if (!stopWords.contains(tempkey)) {
+                    // 如果不是停用词表中的词则有效
                     this.word.set(className + "@" + tempkey);
                     context.write(this.word, this.singleCount);
                 }

@@ -27,7 +27,7 @@ public class CalcDocNumInClass extends Configured implements Tool {
 
         public void map(Text key, BytesWritable value, Context context)
                 throws IOException, InterruptedException {
-            // 获取文件名和文件目录名
+            // 获取文件名和文件目录名 类别@文件名
             String[] classAndFile = key.toString().split("@");
             System.out.println(classAndFile[0]);
             String className = classAndFile[0];

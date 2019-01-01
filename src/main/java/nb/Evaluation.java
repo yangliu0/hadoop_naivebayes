@@ -26,6 +26,7 @@ import java.util.Map;
 /**
  * Created by Yang Liu on 2018/12/29
  */
+// 评估
 public class Evaluation extends Configured implements Tool {
     private static HashMap<String, String> realClass = new HashMap<>();
     private static HashMap<String, String> predictClass = new HashMap<>();
@@ -84,7 +85,7 @@ public class Evaluation extends Configured implements Tool {
                 for (Map.Entry<String, String> entry : predictClass.entrySet()) {
                     if (realClass.get(entry.getKey()).equals(className)
                             && entry.getValue().equals(className)) {
-                        // TN
+                        // TP
                         text.set(className + tp);
                         context.write(text, one);
                     } else if (realClass.get(entry.getKey()).equals(className)

@@ -87,8 +87,6 @@ class WholeFileRecordReader extends RecordReader<NullWritable, BytesWritable> {
                 // BytesWritable是一个可用做key或value的字节序列，而ByteWritable是单个字节。
                 // 将value的内容设置为contents的值
                 value.set(contents, 0, contents.length);
-//				byte[] length = new byte[]{(byte) fileSplit.getLength()};
-//				value.set(length, 0, length.length);
             } finally {
                 IOUtils.closeStream(in);
             }
@@ -97,6 +95,4 @@ class WholeFileRecordReader extends RecordReader<NullWritable, BytesWritable> {
         }
         return false;
     }
-
-
 }

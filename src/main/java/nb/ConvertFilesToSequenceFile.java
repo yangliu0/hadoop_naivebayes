@@ -31,6 +31,7 @@ public class ConvertFilesToSequenceFile extends Configured implements Tool {
 
         @Override
         protected void setup(Context context) {
+            // 通过处理路径来获取key
             InputSplit split = context.getInputSplit();
             String fileName = ((FileSplit) split).getPath().getName();
             String className = ((FileSplit) split).getPath().getParent().getName();

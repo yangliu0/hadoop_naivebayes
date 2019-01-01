@@ -27,6 +27,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Yang Liu on 2018/12/29
  */
+// 朴素贝叶斯算法
 public class NaiveBayes extends Configured implements Tool {
     private static Map<String, Double> classPriorProbability = new HashMap<>(); // 类的先验概率
     private static Map<String, Double> termInClassConditionalProbability = new HashMap<>(); // 每个单词在类中的条件概率
@@ -80,7 +81,7 @@ public class NaiveBayes extends Configured implements Tool {
                 System.out.println(classNameKey + "prior probability is " + classPriorValue);
                 classPriorProbability.put(classNameKey, classPriorValue);
             }
-            // 取出类别中每个单词出现的次数,形式为：ANTA@winning 1
+            // 取出类别中每个单词出现的次数,形式为：CANA@yen 6
             SequenceFile.Reader readerOfEachWordNumInClass = new SequenceFile.Reader(fs, eachWordNumInClass, conf);
             Text keyOfEachWordNumInClass = new Text();
             IntWritable valueOfEachWordNumInClass = new IntWritable();
@@ -90,7 +91,7 @@ public class NaiveBayes extends Configured implements Tool {
             }
             readerOfEachWordNumInClass.close();
 
-            // 取出每个类别中一共有多少个单词term(word),形式为：ANTA 193
+            // 取出每个类别中一共有多少个单词term(word),形式为：CANA 28509
             SequenceFile.Reader readerOfAllWordNumInClass = new SequenceFile.Reader(fs, allWordNumInClass, conf);
             Text keyOfAllWordNumInClass = new Text();
             IntWritable valueOfAllWordNumInClass = new IntWritable();
@@ -125,15 +126,16 @@ public class NaiveBayes extends Configured implements Tool {
                     String classAndWord;
                     if (!stopWords.contains(temkey)) {
                         classAndWord = classname + "@" + temkey;
-                        //如果该单词之前出现过，则取出条件概率
                         if (termInClassConditionalProbability.containsKey(classAndWord)) {
+                            // 如果该单词之前出现过，则取出条件概率
                             multipleTerm += Math.log10(termInClassConditionalProbability.get(classAndWord));
-                        } else {//如果该单词是第一次出现，则它的条件概率设为1/all
+                        } else {
+                            // 如果该单词是第一次出现，则它的条件概率设为1/all
                             multipleTerm += Math.log10(1.0 / AllTermNumInClass.get(classname).doubleValue());
                         }
                     }
                 }
-                //再加上先验概率
+                // 再加上先验概率
                 multipleTerm += Math.log10(classPriorProbability.get(classname));
                 this.docClassAndProbability.set(classname + "/" + multipleTerm);
                 System.out.println(key.toString() + "  " + this.docClassAndProbability);
